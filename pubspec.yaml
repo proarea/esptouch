@@ -1,6 +1,6 @@
 name: esptouch
 description: Client-side (mobile) Flutter(Dart) implementation for ESP-Touch protocol
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/proarea-co/esptouch/tree/master
 authors:
   - Mykhailo Temnokhud <mykhailo.temnokhud@proarea.co>

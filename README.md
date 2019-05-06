@@ -13,6 +13,7 @@ Client-side (mobile) Dart implementation for ESP-Touch protocol
 ## Task list
 - [ ] Initial release
 - [ ] Add tests covering
+- [ ] Add support for dart:typed_data
 - [ ] Add multicast support
 - [ ] Add AES support
 
