@@ -38,8 +38,20 @@ class UDPSocketServer {
     }
   }
 
-  Future<void> sendData(List<List<int>> data, String targetHostName, int targetPort, int interval) {
-    return _sendData(data, 0, data.length, targetHostName, targetPort, interval);
+  Future<void> sendData(
+    List<List<int>> data,
+    String targetHostName,
+    int targetPort,
+    int interval,
+  ) {
+    return _sendData(
+      data,
+      0,
+      data.length,
+      targetHostName,
+      targetPort,
+      interval,
+    );
   }
 
   Future<void> _sendData(

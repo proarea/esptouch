@@ -9,12 +9,13 @@ class EsptouchResult {
 
   bool cancelled;
 
-  EsptouchResult(this.succeed, this.bssid, this.internetAddress) : this.cancelled = false;
+  EsptouchResult(this.succeed, this.bssid, this.internetAddress)
+      : this.cancelled = false;
   EsptouchResult.fail(this.cancelled)
       : succeed = false,
         bssid = null,
         internetAddress = null;
 
   @override
-  String toString() => '{ succeed: $succeed, bssid: $bssid, internetAddress: $internetAddress }';
+  String toString() => '{ succeed: $succeed, $bssid, $internetAddress }';
 }

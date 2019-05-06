@@ -28,7 +28,8 @@ class EspNetUtil {
     return bytes;
   }
 
-  static InternetAddress parseInternetAddress(List<int> inetAddrBytes, int offset, int count) {
+  static InternetAddress parseInternetAddress(
+      List<int> inetAddrBytes, int offset, int count) {
     StringBuffer stringBuffer = StringBuffer();
 
     for (int i = 0; i < count; i++) {
@@ -51,7 +52,8 @@ class EspNetUtil {
     List<int> result = new List(bssidSplits.length);
 
     for (int i = 0; i < bssidSplits.length; i++) {
-      result[i] = ByteUtil.convertUint8toByte(int.parse(bssidSplits[i], radix: 16));
+      result[i] =
+          ByteUtil.convertUint8toByte(int.parse(bssidSplits[i], radix: 16));
     }
 
     return result;

@@ -14,7 +14,9 @@ class UDPSocketClient {
   static Future<UDPSocketClient> create(int port) async {
     UDPSocketClient server = UDPSocketClient._();
     try {
-      server.mServerSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, port, reuseAddress: true);
+      server.mServerSocket = await RawDatagramSocket.bind(
+          InternetAddress.anyIPv4, port,
+          reuseAddress: true);
     } catch (e) {
       if (EsptouchConfig.logging) {
         print('[UDPSocketClient][create] IOException');
@@ -24,7 +26,8 @@ class UDPSocketClient {
     return server;
   }
 
-  void listenSpecLengthBytes(final int length, void Function(List<int> bytes) onReceived) {
+  void listenSpecLengthBytes(
+      final int length, void Function(List<int> bytes) onReceived) {
     if (EsptouchConfig.logging) {
       print('[UDPSocketClient][listenSpecLengthBytes] length=$length');
     }
@@ -37,8 +40,10 @@ class UDPSocketClient {
           if (onReceived != null) {
             List<int> specLengthData = List.from(datagram.data);
             if (EsptouchConfig.udpLogging) {
-              String receivedDataInfo = 'recevied=${specLengthData.length}, data=$specLengthData';
-              print('[UDPSocketClient][listenSpecLengthBytes] length=$length, $receivedDataInfo');
+              String receivedDataInfo =
+                  'recevied=${specLengthData.length}, data=$specLengthData';
+              print(
+                  '[UDPSocketClient][listenSpecLengthBytes] length=$length, $receivedDataInfo');
             }
 
             onReceived(specLengthData);

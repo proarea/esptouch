@@ -50,7 +50,8 @@ class InternalEsptouchTask implements IEsptouchTask {
     bool ssidHidden,
   }) async {
     final UDPSocketServer socketServer = await UDPSocketServer.create();
-    final UDPSocketClient socketClient = await UDPSocketClient.create(EsptouchConstants.portListening);
+    final UDPSocketClient socketClient =
+        await UDPSocketClient.create(EsptouchConstants.portListening);
 
     InternalEsptouchTask internalTask = InternalEsptouchTask._(
       parameter: parameter,
@@ -63,7 +64,8 @@ class InternalEsptouchTask implements IEsptouchTask {
     return internalTask;
   }
 
-  void _cacheEsptouchResult(bool succeed, String bssid, InternetAddress internetAddress) {
+  void _cacheEsptouchResult(
+      bool succeed, String bssid, InternetAddress internetAddress) {
     int count = connectedDevices[bssid] ?? 0;
 
     count++;
@@ -72,10 +74,12 @@ class InternalEsptouchTask implements IEsptouchTask {
       print('[InternalEsptouchTask][_cacheEsptouchResult]: count = $count');
     }
 
-    bool enoughDevicesConnected = count >= EsptouchConstants.thresholdSucBroadcastCount;
+    bool enoughDevicesConnected =
+        count >= EsptouchConstants.thresholdSucBroadcastCount;
     if (!enoughDevicesConnected) {
       if (EsptouchConfig.logging) {
-        print('[InternalEsptouchTask][_cacheEsptouchResult]: count = $count, is not enough');
+        print(
+            '[InternalEsptouchTask][_cacheEsptouchResult]: count = $count, is not enough');
       }
       return;
     }
@@ -90,9 +94,11 @@ class InternalEsptouchTask implements IEsptouchTask {
 
     if (!exist) {
       if (EsptouchConfig.logging) {
-        print('[InternalEsptouchTask][_cacheEsptouchResult]: cache result bssid=$bssid, address=$internetAddress');
+        print(
+            '[InternalEsptouchTask][_cacheEsptouchResult]: cache result bssid=$bssid, address=$internetAddress');
       }
-      final EsptouchResult newResult = new EsptouchResult(succeed, bssid, internetAddress);
+      final EsptouchResult newResult =
+          new EsptouchResult(succeed, bssid, internetAddress);
       resultList.add(newResult);
       if (esptouchListener != null) {
         esptouchListener(newResult);
@@ -123,24 +129,28 @@ class InternalEsptouchTask implements IEsptouchTask {
 
   void _onDatagramReceived(List<int> bytes) {
     if (resultList.length < parameter.deviceCount && !interrupted) {
-      int expectOneByte = wifiInfo.ssid.bytes.length + wifiInfo.password.bytes.length + 9;
+      int expectOneByte =
+          wifiInfo.ssid.bytes.length + wifiInfo.password.bytes.length + 9;
 
       if (bytes != null) {
         int receiveOneByte = bytes != null ? bytes[0] : -1;
 
         if (receiveOneByte == expectOneByte) {
           // change the socket's timeout
-          int consume = DateTime.now().millisecondsSinceEpoch - _lastDatagramReceivedTimestamp;
+          int consume = DateTime.now().millisecondsSinceEpoch -
+              _lastDatagramReceivedTimestamp;
           int timeout = EsptouchConstants.waitUdpTotalMillisecond - consume;
 
           if (timeout < 0) {
             if (EsptouchConfig.udpListenerLogging) {
-              print('[InternalEsptouchTask][_onDatagramReceived]: esptouch timeout');
+              print(
+                  '[InternalEsptouchTask][_onDatagramReceived]: esptouch timeout');
             }
             _onDatagramReceivingFinished();
           } else {
             if (EsptouchConfig.udpListenerLogging) {
-              print('[InternalEsptouchTask][_onDatagramReceived]: received correct broadcast $receiveOneByte');
+              print(
+                  '[InternalEsptouchTask][_onDatagramReceived]: received correct broadcast $receiveOneByte');
             }
             String bssid = BssidParser.parseBssid(
               bytes,
@@ -149,14 +159,16 @@ class InternalEsptouchTask implements IEsptouchTask {
             );
             InternetAddress inetAddress = EspNetUtil.parseInternetAddress(
               bytes,
-              EsptouchConstants.esptouchResultOneLen + EsptouchConstants.esptouchResultMacLen,
+              EsptouchConstants.esptouchResultOneLen +
+                  EsptouchConstants.esptouchResultMacLen,
               EsptouchConstants.esptouchResultIpLen,
             );
             _cacheEsptouchResult(true, bssid, inetAddress);
           }
         } else {
           if (EsptouchConfig.udpListenerLogging) {
-            print('[InternalEsptouchTask][_onDatagramReceived]: receive rubbish message, just ignore');
+            print(
+                '[InternalEsptouchTask][_onDatagramReceived]: receive rubbish message, just ignore');
           }
         }
       }
@@ -183,25 +195,31 @@ class InternalEsptouchTask implements IEsptouchTask {
 
     int index = 0;
     while (!interrupted) {
-      if (currentTime - lastTime >= EsptouchConstants.timeoutTotalCodeMillisecond) {
+      if (currentTime - lastTime >=
+          EsptouchConstants.timeoutTotalCodeMillisecond) {
         if (EsptouchConfig.logging) {
           print('[InternalEsptouchTask][_execute]: send GuideCode');
         }
-        int timeoutGuideCodeMillis = EsptouchConstants.timeoutGuideCodeMillisecond;
-        while (!interrupted && DateTime.now().millisecondsSinceEpoch - currentTime < timeoutGuideCodeMillis) {
+        int timeoutGuideCodeMillis =
+            EsptouchConstants.timeoutGuideCodeMillisecond;
+        while (!interrupted &&
+            DateTime.now().millisecondsSinceEpoch - currentTime <
+                timeoutGuideCodeMillis) {
           await socketServer.sendData(
             gcBytes2,
             parameter.targetHostname,
             EsptouchConstants.portTarget,
             EsptouchConstants.intervalGuideCodeMillisecond,
           );
-          if (DateTime.now().millisecondsSinceEpoch - startTime > EsptouchConstants.waitUdpSendingMillisecond) {
+          if (DateTime.now().millisecondsSinceEpoch - startTime >
+              EsptouchConstants.waitUdpSendingMillisecond) {
             break;
           }
         }
         lastTime = currentTime;
       } else {
-        List<List<int>> dataToSend = dcBytes2.sublist(index, index + oneDataLength);
+        List<List<int>> dataToSend =
+            dcBytes2.sublist(index, index + oneDataLength);
         await socketServer.sendData(
           dataToSend,
           parameter.targetHostname,
@@ -211,7 +229,8 @@ class InternalEsptouchTask implements IEsptouchTask {
         index = (index + oneDataLength) % dcBytes2.length;
       }
       currentTime = DateTime.now().millisecondsSinceEpoch;
-      if (currentTime - startTime > EsptouchConstants.waitUdpSendingMillisecond) {
+      if (currentTime - startTime >
+          EsptouchConstants.waitUdpSendingMillisecond) {
         break;
       }
     }
@@ -225,7 +244,8 @@ class InternalEsptouchTask implements IEsptouchTask {
   @override
   Future<List<EsptouchResult>> connectMany(int deviceCount) async {
     if (this.executed) {
-      throw EsptouchArgumentException('InternalEsptouchTask', 'connectManyDevices', 'Esptouch task already executed');
+      throw EsptouchArgumentException('InternalEsptouchTask',
+          'connectManyDevices', 'Esptouch task already executed');
     }
     this.executed = true;
 
@@ -236,7 +256,8 @@ class InternalEsptouchTask implements IEsptouchTask {
     }
 
     if (EsptouchConfig.logging) {
-      print('[InternalEsptouchTask][connectMany]: started deviceCount=$deviceCount');
+      print(
+          '[InternalEsptouchTask][connectMany]: started deviceCount=$deviceCount');
     }
 
     InternetAddress localInetAddress;
@@ -247,7 +268,8 @@ class InternalEsptouchTask implements IEsptouchTask {
     }
 
     if (EsptouchConfig.logging) {
-      print('[InternalEsptouchTask][connectMany]: localInetAddress = $localInetAddress');
+      print(
+          '[InternalEsptouchTask][connectMany]: localInetAddress = $localInetAddress');
     }
 
     IEsptouchGenerator generator = EsptouchGenerator(wifiInfo, ssidHidden);
@@ -263,7 +285,8 @@ class InternalEsptouchTask implements IEsptouchTask {
     }
 
     if (!interrupted) {
-      await Future.delayed(Duration(milliseconds: EsptouchConstants.waitUdpReceivingMillisecond));
+      await Future.delayed(Duration(
+          milliseconds: EsptouchConstants.waitUdpReceivingMillisecond));
       this._interrupt();
     }
 

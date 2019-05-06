@@ -3,7 +3,9 @@ class EsptouchArgumentException implements Exception {
   final String methodName;
   final String message;
 
-  const EsptouchArgumentException(this.className, this.methodName, this.message);
+  const EsptouchArgumentException(
+      this.className, this.methodName, this.message);
 
-  String toString() => 'EsptouchArgumentException: [$className][$methodName] $message';
+  String toString() =>
+      'EsptouchArgumentException: [$className][$methodName] $message';
 }
