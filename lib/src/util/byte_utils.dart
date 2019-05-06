@@ -12,7 +12,11 @@ class ByteUtil {
 
   static int convertUint8toByte(int uint8) {
     if (uint8 > intMax - intMin) {
-      throw EsptouchArgumentException('ByteUtil', 'convertUint8toByte', 'Out of Boundary');
+      throw EsptouchArgumentException(
+        'ByteUtil',
+        'convertUint8toByte',
+        'Out of Boundary',
+      );
     }
 
     return Uint8List.fromList([uint8]).buffer.asByteData().getInt8(0);
@@ -24,13 +28,18 @@ class ByteUtil {
 
   static int convertByteToUint8(int byte) => (byte & 0xff);
 
-  static String convertByte2HexString(int byte) => convertByteToUint8(byte).toRadixString(16);
+  static String convertByte2HexString(int byte) =>
+      convertByteToUint8(byte).toRadixString(16);
 
   static String convertUint8ToHexString(int uint8) => uint8.toRadixString(16);
 
   static List<int> splitUint8ToTwoBytes(int uint8) {
     if (uint8 < 0 || uint8 > 0xff) {
-      throw EsptouchArgumentException('ByteUtil', 'splitUint8ToTwoBytes', 'Out of Boundary');
+      throw EsptouchArgumentException(
+        'ByteUtil',
+        'splitUint8ToTwoBytes',
+        'Out of Boundary',
+      );
     }
 
     String hexString = uint8.toRadixString(16);
@@ -48,7 +57,11 @@ class ByteUtil {
 
   static int combineTwoBytesToOne(int highByte, int lowByte) {
     if (highByte < 0 || highByte > 0xf || lowByte < 0 || lowByte > 0xf) {
-      throw EsptouchArgumentException('ByteUtil', 'combineTwoBytesToOne', 'Out of Boundary');
+      throw EsptouchArgumentException(
+        'ByteUtil',
+        'combineTwoBytesToOne',
+        'Out of Boundary',
+      );
     }
 
     return (highByte << 4 | lowByte);
@@ -63,9 +76,11 @@ class ByteUtil {
 
   static int randomByte() => (127 - Random().nextInt(256));
 
-  static List<int> randomBytes(int length) => List.generate(length, (_) => randomByte());
+  static List<int> randomBytes(int length) =>
+      List.generate(length, (_) => randomByte());
 
-  static List<int> genSpecBytes(int length) => List.generate(length, (_) => '1'.codeUnitAt(0));
+  static List<int> genSpecBytes(int length) =>
+      List.generate(length, (_) => '1'.codeUnitAt(0));
 
   static List<int> randomUInt8Bytes(int length) {
     int uint8Length = convertByteToUint8(length);
@@ -103,7 +118,9 @@ class ByteUtil {
     // -1: 1111 1111 should be 255 in unsigned int
     int b2 = -128;
     int b3 = -1;
-    if (convertByteToUint8(b1) == 97 && convertByteToUint8(b2) == 128 && convertByteToUint8(b3) == 255) {
+    if (convertByteToUint8(b1) == 97 &&
+        convertByteToUint8(b2) == 128 &&
+        convertByteToUint8(b3) == 255) {
       print("testConvertChar2Uint8(): pass");
     } else {
       print("testConvertChar2Uint8(): fail");

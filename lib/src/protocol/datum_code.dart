@@ -31,10 +31,12 @@ class DatumCode implements ByteData, Uint8Data {
 
     int wifiSsidLength = wifiInfo.ssid.bytes.length;
 
-    List<int> ipBytes = ByteUtil.convertUint8ToBytes(wifiInfo.rawInternetAddress);
+    List<int> ipBytes =
+        ByteUtil.convertUint8ToBytes(wifiInfo.rawInternetAddress);
     int ipLength = ipBytes.length;
 
-    int _totalLen = (_extraHeadLength + ipLength + wifiPasswordLength + wifiSsidLength);
+    int _totalLen =
+        (_extraHeadLength + ipLength + wifiPasswordLength + wifiSsidLength);
     int totalLen = ssidHidden
         ? (_extraHeadLength + ipLength + wifiPasswordLength + wifiSsidLength)
         : (_extraHeadLength + ipLength + wifiPasswordLength);
@@ -67,7 +69,9 @@ class DatumCode implements ByteData, Uint8Data {
       int c = ByteUtil.convertByteToUint8(wifiInfo.ssid.bytes[i]);
       totalXor ^= c;
       if (ssidHidden) {
-        _dataCodes.add(DataCode(c, i + _extraHeadLength + ipLength + wifiPasswordLength));
+        _dataCodes.add(
+          DataCode(c, i + _extraHeadLength + ipLength + wifiPasswordLength),
+        );
       }
     }
 

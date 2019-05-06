@@ -17,12 +17,20 @@ class EsptouchTask implements IEsptouchTask {
   }) async {
     String ssid = wifiInfo.ssid.text;
     if (ssid == null || ssid.isEmpty) {
-      throw EsptouchArgumentException('EsptouchTask', 'create', 'SSID can not be empty');
+      throw EsptouchArgumentException(
+        'EsptouchTask',
+        'create',
+        'SSID can not be empty',
+      );
     }
 
     String bssid = wifiInfo.bssid.text;
     if (bssid == null || bssid.isEmpty) {
-      throw EsptouchArgumentException('EsptouchTask', 'create', 'BSSID can not be empty');
+      throw EsptouchArgumentException(
+        'EsptouchTask',
+        'create',
+        'BSSID can not be empty',
+      );
     }
 
     EsptouchTaskParameter parameter = EsptouchTaskParameter(deviceCount ?? 1);
@@ -47,7 +55,8 @@ class EsptouchTask implements IEsptouchTask {
   Future<EsptouchResult> connectOne() => _internalTask.connectOne();
 
   @override
-  Future<List<EsptouchResult>> connectMany(int deviceCount) => _internalTask.connectMany(deviceCount);
+  Future<List<EsptouchResult>> connectMany(int deviceCount) =>
+      _internalTask.connectMany(deviceCount);
 
   @override
   void interrupt() => _internalTask.interrupt();

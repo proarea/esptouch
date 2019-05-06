@@ -29,7 +29,11 @@ class DataCode implements ByteData {
 
   DataCode(int uint8, int index) {
     if (index > _indexMax) {
-      throw EsptouchArgumentException('DataCode', 'constructor', 'index > INDEX_MAX');
+      throw EsptouchArgumentException(
+        'DataCode',
+        'constructor',
+        'index > INDEX_MAX',
+      );
     }
     List<int> dataBytes = ByteUtil.splitUint8ToTwoBytes(uint8);
     _dataHigh = dataBytes[0];

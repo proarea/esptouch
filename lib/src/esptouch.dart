@@ -98,10 +98,15 @@ class Esptouch {
   static void _isolateCallback(final _IsolateParameter parameter) async {
     WifiInfo wifiInfo = parameter;
     try {
-      esptouchTask = await EsptouchTask.create(wifiInfo, deviceCount: parameter.deviceCount);
-      esptouchTask.esptouchListener = (EsptouchResult result) => parameter.sendPort.send(result);
+      esptouchTask = await EsptouchTask.create(
+        wifiInfo,
+        deviceCount: parameter.deviceCount,
+      );
+      esptouchTask.esptouchListener =
+          (EsptouchResult result) => parameter.sendPort.send(result);
 
-      parameter.sendPort.send(await esptouchTask.connectMany(parameter.deviceCount));
+      parameter.sendPort
+          .send(await esptouchTask.connectMany(parameter.deviceCount));
     } catch (e) {
       parameter.sendPort.send(e);
     }
