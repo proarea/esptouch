@@ -1,5 +1,7 @@
 name: example
 description: Example of using ESP-Touch implementation
+homepage: https://github.com/proarea-co/esptouch/tree/master/example
+author: Mykhailo Temnokhud <mykhailo.temnokhud@proarea.co>
 
 version: 1.0.0+1
 
@@ -11,13 +13,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^0.1.2
   
-  esptouch: 0.0.2
-
-  connectivity: 0.4.3+1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  esptouch: ^0.0.3 # checked on 0.0.3
 
 flutter:
   uses-material-design: true
