@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:isolate';
 
 import 'package:meta/meta.dart';
@@ -11,10 +12,34 @@ import 'esptouch_config.dart';
 typedef void EsptouchErrorListener(dynamic error);
 typedef void EsptouchResultListListener(List<EsptouchResult> resultList);
 
+enum EsptouchEventType { Started, DeviceConnected, Finished, Stopped }
+
+class EsptouchEvent {
+  final EsptouchEventType event;
+  final dynamic type;
+
+  EsptouchEvent(this.event, this.type);
+}
+
+StreamController _esptouchStreamController;
+
+void start() {
+  subscription = _esptouchStreamController.stream.listen((counter) {
+    print(counter); // Print an integer every second.
+    if (counter == 5) {
+      // After 5 ticks, pause for five seconds, then resume.
+      subscription.pause(Future.delayed(const Duration(seconds: 5)));
+    }
+  });
+
+  _esptouchStreamController.done;
+}
+
 class Esptouch {
   static bool _executing = false;
   static Isolate isolate;
   static EsptouchTask esptouchTask;
+  static StreamSubscription subscription;
 
   static EsptouchErrorListener onEsptouchError;
   static EsptouchResultListener onEsptouchResult;
@@ -102,11 +127,9 @@ class Esptouch {
         wifiInfo,
         deviceCount: parameter.deviceCount,
       );
-      esptouchTask.esptouchListener =
-          (EsptouchResult result) => parameter.sendPort.send(result);
+      esptouchTask.esptouchListener = (EsptouchResult result) => parameter.sendPort.send(result);
 
-      parameter.sendPort
-          .send(await esptouchTask.connectMany(parameter.deviceCount));
+      parameter.sendPort.send(await esptouchTask.connectMany(parameter.deviceCount));
     } catch (e) {
       parameter.sendPort.send(e);
     }
